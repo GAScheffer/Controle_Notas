@@ -1,0 +1,32 @@
+// Este código coleta o valor contido na célula B5 até B15 da folha 'Dados_Emissão_NF'; 
+// procura estes valores na folha 'NOTAS FISCAIS' e na mesma linha, preenche na coluna T a data do dia
+
+
+function status_Aguardando_NF() { 
+  var planilha = SpreadsheetApp.getActiveSpreadsheet(); 
+  var abaNotasFiscais = planilha.getSheetByName("NOTAS FISCAIS"); 
+  
+  // Obter os números das células B5:B15 de Dados_Emissão_NF
+  var numerosPesquisa = planilha.getSheetByName("Dados_Emissão_NF").getRange("A5:A16").getValues(); 
+  
+  // Obter a coluna Pedidos na aba NOTAS FISCAIS 
+  var colunaPedidos = abaNotasFiscais.getRange("E:E").getValues(); 
+  
+  // Pesquisar os números na coluna Pedidos 
+  for (var i = 0; i < numerosPesquisa.length; i++) { 
+    var numeroPesquisa = numerosPesquisa[i][0]; 
+    for (var j = 0; j < colunaPedidos.length; j++) { 
+      if (colunaPedidos[j][0] == numeroPesquisa) { 
+        
+        // Formatação da data: 
+        var dataAtual = Utilities.formatDate(new Date(), "GMT", "dd/MM/yyyy");
+        abaNotasFiscais.getRange("T" + (j + 1)).setValue(dataAtual);
+        
+      // Escrever "Solicitado NF" na coluna STATUS 
+      // abaNotasFiscais.getRange("U" + (j + 1)).setValue("Aguardando NF"); 
+      // ADICIONAR PREENCHIMENTO AUTOMÁTICO DE DATA 
+      break; 
+      } 
+    } 
+  }
+}
